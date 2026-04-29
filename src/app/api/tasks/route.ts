@@ -25,9 +25,21 @@ export async function POST(req: Request) {
   await dbConnect();
   try {
     const body = await req.json();
-    const newTask = await Task.create(body);
+    
+    
+    console.log("New Task Payload:", body);
+
+    const newTask = await Task.create({
+      title: body.title,
+      description: body.description,
+      priority: body.priority || "Medium",
+      status: body.status || "todo",      
+      userId: body.userId
+    });
+
     return NextResponse.json(newTask, { status: 201 });
   } catch (error: any) {
-    return NextResponse.json({ message: error.message }, { status: 500 });
+    console.error("POST Error:", error.message);
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

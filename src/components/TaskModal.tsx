@@ -20,23 +20,40 @@ export default function TaskModal({ isOpen, onClose, onTaskAdded, initialData }:
   }, [initialData, isOpen]);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const taskData = { title, description, priority, userId: user.id, status: initialData ? initialData.status : "todo" };
+  e.preventDefault();
+  
+  // Local storage se user fetch karein
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  
+  // Check karein ke user.id maujood hai (kuch log user._id use karte hain)
+  const uId = user.id || user._id; 
 
-    try {
-      if (initialData) {
-        await axios.put(`/api/tasks/${initialData._id}`, taskData);
-      } else {
-        await axios.post("/api/tasks", taskData);
-      }
-      onTaskAdded();
-      onClose();
-    } catch (error) {
-      alert("Error saving task");
-    }
+  if (!uId) {
+    alert("User session expired. Please login again.");
+    return;
+  }
+
+  const taskData = { 
+    title, 
+    description, 
+    priority, 
+    userId: uId,
+    status: "todo" // Naye task ke liye lazmi status bhein
   };
 
+  try {
+    if (initialData) {
+      await axios.put(`/api/tasks/${initialData._id}`, taskData);
+    } else {
+      await axios.post("/api/tasks", taskData);
+    }
+    onTaskAdded();
+    onClose();
+  } catch (error) {
+    console.error(error);
+    alert("Error saving task");
+  }
+};
   if (!isOpen) return null;
 
   return (

@@ -43,32 +43,33 @@ export default function Dashboard() {
     if (!destination) return;
     if (destination.droppableId === source.droppableId && destination.index === source.index) return;
 
-    // UI ko foran update karein (Optimistic UI)
+    
     const updatedTasks = Array.from(tasks);
     const taskIndex = updatedTasks.findIndex(t => t._id === draggableId);
     updatedTasks[taskIndex].status = destination.droppableId;
     setTasks(updatedTasks);
 
-    // Backend par status update karein
+  
     try {
       await axios.put(`/api/tasks/${draggableId}`, { status: destination.droppableId });
     } catch (error) {
       console.error("Failed to update status");
-      fetchTasks(user.id); // Error pe wapas fetch karein
+      fetchTasks(user.id); 
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm("Are you sure you want to delete this task?")) {
-      try {
-        await axios.delete(`/api/tasks/${id}`);
-        fetchTasks(user.id);
-      } catch (error) {
-        alert("Delete failed!");
-      }
+  if (window.confirm("Are you sure?")) {
+    try {
+      
+      await axios.delete(`/api/tasks/${id}`); 
+      fetchTasks(user.id); 
+    } catch (error) {
+      console.error("Delete failed", error);
+      alert("Delete failed! Path check karein.");
     }
-  };
-
+  }
+};
   return (
     <div className="min-h-screen bg-[#0f1120] text-white p-4 md:p-8">
       {/* Header */}
