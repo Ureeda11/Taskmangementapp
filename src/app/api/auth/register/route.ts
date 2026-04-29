@@ -3,21 +3,22 @@ import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/models/User";
 import bcrypt from "bcryptjs";
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: Request) {
-    await dbConnect();
     try {
+        
+        await dbConnect();
+
         const { username, email, password } = await request.json();
 
-        
         const existingUser = await UserModel.findOne({ email });
         if (existingUser) {
             return NextResponse.json({ message: "Email already exists" }, { status: 400 });
         }
 
-       
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        
         const newUser = await UserModel.create({
             username,
             email,
@@ -30,6 +31,7 @@ export async function POST(request: Request) {
         }, { status: 201 });
 
     } catch (error: any) {
+        console.error("Registration error:", error); 
         return NextResponse.json({ message: error.message }, { status: 500 });
     }
 }
