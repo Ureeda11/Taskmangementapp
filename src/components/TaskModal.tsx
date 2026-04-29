@@ -22,7 +22,7 @@ export default function TaskModal({ isOpen, onClose, onTaskAdded, initialData }:
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const taskData = { title, description, priority, userId: user.id };
+    const taskData = { title, description, priority, userId: user.id, status: initialData ? initialData.status : "todo" };
 
     try {
       if (initialData) {
