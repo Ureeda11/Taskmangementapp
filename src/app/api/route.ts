@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/dbConnect";
-import Task from "@/models/Task"; // Check karein ke models folder mein 'Task' file maujood hai
+import Task from "@/models/Task"; 
 
 export async function GET(req: Request) {
   await dbConnect();
@@ -23,7 +23,7 @@ export async function POST(req: Request) {
   await dbConnect();
   try {
     const body = await req.json();
-    // Ensure body mein title, description, priority, aur userId shamil ho
+    
     const newTask = await Task.create(body);
     return NextResponse.json(newTask, { status: 201 });
   } catch (error: any) {
