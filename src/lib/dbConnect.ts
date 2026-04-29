@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const MONGODB_URI = process.env.MONGODB_URI!;
 
 if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
+  throw new Error('mongodb://ureead2006_db_user:helloworld@ac-m3nfm9a-shard-00-00.zwea1p8.mongodb.net:27017,ac-m3nfm9a-shard-00-01.zwea1p8.mongodb.net:27017,ac-m3nfm9a-shard-00-02.zwea1p8.mongodb.net:27017/?ssl=true&replicaSet=atlas-1gl7is-shard-0&authSource=admin&appName=Cluster0');
 }
 
 
